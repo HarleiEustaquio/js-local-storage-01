@@ -1,54 +1,101 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const formularioUsuario = document.getElementById('formularioUsuario');
-    const entradaNome = document.getElementById('entradaNome');
-    const entradaIdade = document.getElementById('entradaIdade');
-    const entradaCurso = document.getElementById('entradaCurso');
-    const listaUsuarios = document.getElementById('listaUsuarios');
-
-    // Função para salvar os dados no LocalStorage como array de objetos:
-    function salvarDados() {
-        const usuario = {
-            nome: entradaNome.value,
-            idade: entradaIdade.value,
-            curso: entradaCurso.value
-        };
-
-        // Recuperar a lista de usuários do LocalStorage:
-        let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-        // Adicionar o novo usuário à lista:
-        usuarios.push(usuario);
-
-        // Salvar a lista atualizada no LocalStorage:
-        localStorage.setItem('usuarios', JSON.stringify(usuarios));
-        exibirUsuarios();
+class Imovel {
+    constructor(id, tipo, endereco, valor, status) {
+        this._id = id;
+        this._tipo = tipo;
+        this._endereco = endereco;
+        this._valor = valor;
+        this._status = status;
     }
 
-    // Função para exibir a lista de usuários salvos:
-    function exibirUsuarios() {
-        // Limpar a lista atual:
-        listaUsuarios.innerHTML = '';
-
-        // Recuperar a lista de usuários do LocalStorage:
-        const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
-
-        // Adicionar cada usuário da lista na interface:
-        usuarios.forEach((usuario, index) => {
-            const li = document.createElement('li');
-            li.textContent = `Nome: ${usuario.nome}, Idade: ${usuario.idade}, Curso: ${usuario.curso}`;
-            listaUsuarios.appendChild(li);
-        });
+    get id() {
+        return this._id;
     }
 
-    // Evento de submissão do formulário:
-    formularioUsuario.addEventListener('submit', (evento) => {
-        // Previne o comportamento padrão do formulário (recarregar a página):
-        evento.preventDefault(); 
+    get tipo() {
+        return this._tipo;
+    }
 
-        // Salva os dados no LocalStorage:
-        salvarDados(); 
-    });
+    get endereco() {
+        return this._endereco;
+    }
 
-    // Exibir a lista de usuários quando a página for carregada pelo navegador:
-    exibirUsuarios();
+    get valor() {
+        return this._valor;
+    }
+
+    get status() {
+        return this._status;
+    }
+
+    set tipo(tipo) {
+        this._tipo = tipo;
+    }
+
+    set endereco(endereco) {
+        this._endereco = endereco;
+    }
+
+    set valor(valor) {
+        this._valor = valor;
+    }
+
+    set status(status) {
+        this._status = status;
+    }
+}
+
+document.getElementById('imovelForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const tipo = document.getElementById('tipo').value;
+    const endereco = document.getElementById('endereco').value;
+    const valor = document.getElementById('valor').value;
+    const status = document.getElementById('status').value;
+
+    const id = new Date().getTime();
+    const imovel = new Imovel(id, tipo, endereco, valor, status);
+
+    cadastrarImovel(imovel);
+    displayImoveis();
+    this.reset();
 });
+
+function cadastrarImovel(imovel) {
+    const imoveis = JSON.parse(localStorage.getItem('imoveis')) || [];
+    imoveis.push(imovel);
+    localStorage.setItem('imoveis', JSON.stringify(imoveis));
+}
+
+function listarImoveis() {
+    return JSON.parse(localStorage.getItem('imoveis')) || [];
+}
+
+function displayImoveis() {
+    const imoveis = listarImoveis();
+    const imoveisDiv = document.getElementById('imoveis');
+    imoveisDiv.innerHTML = '';
+
+    imoveis.forEach(imovel => {
+        const imovelDiv = document.createElement('div');
+        imovelDiv.classList.add('imovel');
+        imovelDiv.innerHTML = `
+            <div>
+                <strong>Tipo:</strong> ${imovel._tipo}<br>
+                <strong>Endereço:</strong> ${imovel._endereco}<br>
+                <strong>Valor:</strong> ${imovel._valor}<br>
+                <strong>Status:</strong> ${imovel._status}
+            </div>
+            <button onclick="excluirImovel(${imovel._id})">Excluir</button>
+        `;
+        imoveisDiv.appendChild(imovelDiv);
+    });
+}
+
+function excluirImovel(id) {
+    let imoveis = listarImoveis();
+    imoveis = imoveis.filter(imovel => imovel._id !== id);
+    localStorage.setItem('imoveis', JSON.stringify(imoveis));
+    displayImoveis();
+}
+
+document.addEventListener('DOMContentLoaded', displayImoveis);

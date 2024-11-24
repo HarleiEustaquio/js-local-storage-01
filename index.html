@@ -3,24 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exemplo LocalStorage</title>
+    <title>Gerenciamento de Imóveis</title>
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Exemplo de LocalStorage</h1>
-        <form id="formularioUsuario">
-            <label for="entradaNome">Digite seu nome:</label>
-            <input type="text" id="entradaNome" required>
-            <label for="entradaIdade">Digite sua idade:</label>
-            <input type="number" id="entradaIdade" required>
-            <label for="entradaCurso">Digite seu curso:</label>
-            <input type="text" id="entradaCurso" required>
-            <button type="submit">Salvar Dados</button>
-        </form>
-        <h2>Usuários Cadastrados:</h2>
-        <ul id="listaUsuarios"></ul>
-    </div>
+    <header>
+        <h1>Gerenciamento de Imóveis</h1>
+    </header>
+    <main>
+        <section id="cadastro">
+            <h2>Cadastrar Imóvel</h2>
+            <form id="imovelForm">
+                <label for="tipo">Tipo:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="casa">Casa</option>
+                    <option value="apartamento">Apartamento</option>
+                    <option value="kitnet">Kitnet</option>
+                    <option value="loja">Loja</option>
+                    <option value="galpao">Galpão</option>
+                </select>
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" required>
+                <label for="valor">Valor:</label>
+                <input type="number" id="valor" name="valor" required>
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="aluguel">Aluguel</option>
+                    <option value="venda">Venda</option>
+                </select>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </section>
+        <section id="lista">
+            <h2>Lista de Imóveis</h2>
+            <div id="imoveis"></div>
+        </section>
+    </main>
     <script src="funcionalidade.js"></script>
 </body>
 </html>
